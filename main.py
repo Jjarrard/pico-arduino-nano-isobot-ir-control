@@ -18,8 +18,7 @@ html = """<!DOCTYPE html>
 <html>
     <head> <title>Pico W</title> </head>
     <body> 
-        <h1>Pico W</h1>
-        <p>Hello world</p>
+        <h1>Isobot Control</h1>
         <form action="/send">
             <input type="number" name="number">
             <input type="submit" value="Send">
