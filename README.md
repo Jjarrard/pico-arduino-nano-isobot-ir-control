@@ -1,5 +1,5 @@
 # pico-duinonano-i-sobot
-Control your Tomy i-Sobot over wifi using a pico and a 16MHz arduino nano
+Control your Tomy i-Sobot over wifi using a pico W and a 16MHz arduino nano
 
 Only rudimentary currently, manually typing in the command number and pressing the button.
 
@@ -15,7 +15,7 @@ Library files borrowed from Miles Moody, thanks for doing the hard work!
 
 4. Add Isobot library to arduino editor.
 
-5. send the ino file to the arduino using the settings below (remember it needs to be a 16MHz Arduino).
+5. Send the ino file to the arduino using the settings below (remember it needs to be a 16MHz Arduino).
 
 ![image](https://github.com/Jjarrard/pico-duinonano-i-sobot/assets/15104602/ebbdba67-ace4-4200-8cd8-49e09bdc92f9)
 
