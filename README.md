@@ -1,4 +1,4 @@
-# pico-duinonano-i-sobot
+# Pico w + Arduino Nano i-Sobot
 Control your Tomy i-Sobot over wifi using a pico W and a 16MHz arduino nano
 
 Only rudimentary currently, manually typing in the command number and pressing the button.
