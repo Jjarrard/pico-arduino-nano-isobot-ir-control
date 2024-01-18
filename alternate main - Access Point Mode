@@ -1,0 +1,79 @@
+import socket
+import network
+import machine
+from machine import Pin
+import time
+
+led = Pin(15, Pin.OUT)
+
+ssid = 'MicroPython-AP'
+password = '123456789'
+uart = machine.UART(0, baudrate=9600)
+
+led = machine.Pin("LED",machine.Pin.OUT)
+
+ap = network.WLAN(network.AP_IF)
+ap.config(essid=ssid, password=password)
+ap.active(True)
+
+while ap.active() == False:
+  pass
+
+print('Connection successful')
+print(ap.ifconfig())
+
+html = """<!DOCTYPE html>
+<html>
+    <head> 
+        <title>Pico W</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body> 
+        <h1 style="font-size: 36px; color: white; background-color: black; padding: 10px;">Isobot Control</h1>
+        <form action="/send" style="background-color: lightgray; margin: 20px;">
+            <label for="number" style="font-size: 18px; margin: 10px;">Enter a number:</label>
+            <input type="number" id="number" name="number" style="font-size: 24px; margin: 10px;">
+            <input type="submit" value="Send" style="font-size: 24px; margin: 10px;">
+        </form>
+    </body>
+</html>
+"""
+
+addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
+s = socket.socket()
+s.bind(addr)
+s.listen(1)
+
+print('listening on', addr)
+led.off()
+
+# Listen for connections
+while True:
+    try:
+        cl, addr = s.accept()
+        print('client connected from', addr)
+        request = cl.recv(1024)
+        print(request)
+
+        if request:  # Add this line
+            # Parse the request to get the number
+            request_line = request.decode().split('\r\n')[0]
+            method, path, _ = request_line.split(' ')
+            if method == 'GET' and path.startswith('/send'):
+                query = path.split('?', 1)[-1]
+                params = dict(param.split('=') for param in query.split('&'))
+                number = params.get('number')
+                if number:
+                    number = int(number)
+                    print('Number from form:', number)
+                    uart.write(str(number).encode())
+
+        response = html
+
+        cl.send('HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n')
+        cl.send(response)
+        cl.close()
+
+    except OSError as e:
+        cl.close()
+        print('connection closed')
